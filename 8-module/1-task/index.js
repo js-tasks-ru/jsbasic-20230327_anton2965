@@ -3,10 +3,8 @@ import createElement from '../../assets/lib/create-element.js';
 export default class CartIcon {
   constructor() {
     this.render();
-
     this.addEventListeners();
   }
-
   render() {
     this.elem = createElement('<div class="cart-icon"></div>');
   }
@@ -39,6 +37,32 @@ export default class CartIcon {
   }
 
   updatePosition() {
-    // ваш код ...
+    let rect = this.elem.getBoundingClientRect();
+    let width = document.documentElement.clientWidth;
+    let height = document.documentElement.clientHeight;
+    if (width <= 767) {return;}
+    if (document.documentElement.scrollTop === 0) {
+      Object.assign(this.elem.style, {
+        position: '',
+        top: '',
+        zIndex: '',
+        right: '',
+        left: ''
+      });
+    }
+    if (rect.bottom < 0 || rect.top - height >= 0) {
+      let container = document.querySelector('.container');
+      let containerRect = container.getBoundingClientRect();
+      let widthRelativeContainer = containerRect.right + 20;
+      let absoluteWidth = width - this.elem.offsetWidth - 10;
+      let offset = Math.min(widthRelativeContainer, absoluteWidth) + 'px';
+      Object.assign(this.elem.style, {
+        position: 'fixed',
+        top: '50px',
+        zIndex: 1e3,
+        right: '10px',
+        left: offset
+      });
+    }
   }
 }
